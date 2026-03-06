@@ -48,6 +48,32 @@ struct OrderbookView: View {
                         .padding(.horizontal, 16)
                         .padding(.top, 14)
                         .padding(.bottom, 8)
+
+                        // OrderbookTable
+                        VStack {
+                            HStack {
+                                Text("Lot")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(.secondary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Text("Bid")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(.secondary)
+                                    .frame(width: 50, alignment: .trailing)
+                                Text("Ask")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(.secondary)
+                                    .frame(width: 50, alignment: .leading)
+                                Text("Lot")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(.secondary)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 6)
+
+                            Divider()
+                        }
                     }
                 }
             }
