@@ -106,6 +106,36 @@ struct OrderbookView: View {
                             .padding(.bottom, 14)
                         }
                         .background(.blue)
+
+                        // Orderbook / show table toggle
+                        HStack {
+                            Button {
+                                // Could navigate to orderbook-only view
+                            } label: {
+                                Text("Orderbook")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundStyle(.primary)
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 6)
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(.primary.opacity(0.3), lineWidth: 1)
+                                    }
+                            }
+
+                            Spacer()
+
+                            Button {
+                                // Toggle state show/hide table
+                            } label: {
+                                Text("Hide Table")
+                                    .font(.system(size: 13))
+                                    .foregroundStyle(.blue)
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.top, 14)
+                        .padding(.bottom, 8)
                     }
                 }
             }
