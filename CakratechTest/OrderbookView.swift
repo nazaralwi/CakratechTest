@@ -97,10 +97,14 @@ struct OrderbookView: View {
                                     // Bid Price
                                     Group {
                                         if let price = row.bidPrice {
-                                            Text("\(price)")
-                                                .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                                                .foregroundStyle(.green)
-                                                .frame(width: 40, alignment: .trailing)
+                                            Button {
+                                                // Could be selected
+                                            } label: {
+                                                Text("\(price)")
+                                                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                                                    .foregroundStyle(.green)
+                                                    .frame(width: 40, alignment: .trailing)
+                                            }
                                         } else {
                                             Text("").frame(width: 40)
                                         }
@@ -118,10 +122,14 @@ struct OrderbookView: View {
                                     // Ask price
                                     Group {
                                         if let price = row.askPrice {
-                                            Text("\(price)")
-                                                .font(.system(size: 13, weight: .semibold, design: .monospaced))
-                                                .foregroundStyle(.red)
-                                                .frame(width: 40, alignment: .leading)
+                                            Button {
+                                                // Could be selected
+                                            } label: {
+                                                Text("\(price)")
+                                                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                                                    .foregroundStyle(.red)
+                                                    .frame(width: 40, alignment: .leading)
+                                            }
                                         } else {
                                             Text("").frame(width: 40)
                                         }
