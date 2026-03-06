@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct OrderbookView: View {
-    let price = 58
+    let stock = Stock(code: "GOTO", name: "GoTo Gojek Tokopedia Tbk", price: 58, change: 0, changePct: 0.0, logoColor: "#00AA5B", haircutLabel: "100%")
+
     let orderbookRows: [OrderbookRow] = generateOrderbook(basePrice: 58)
 
     var body: some View {
@@ -20,7 +21,7 @@ struct OrderbookView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         // AccountStockHeader
-                        AccountStockHeader(price: price)
+                        AccountStockHeader(stock: stock)
 
                         // Orderbook / show table toggle
                         HStack {
@@ -168,14 +169,6 @@ struct OrderbookView: View {
     }
 }
 
-struct OrderbookRow: Identifiable {
-    let id = UUID()
-    let bidLot: Int?
-    let bidPrice: Int?
-    let askPrice: Int?
-    let askLot: Int?
-}
-
 func generateOrderbook(basePrice: Int) -> [OrderbookRow] {
     var rows: [OrderbookRow] = []
 
@@ -197,7 +190,7 @@ func generateOrderbook(basePrice: Int) -> [OrderbookRow] {
 }
 
 struct AccountStockHeader: View {
-    let price: Int
+    let stock: Stock
 
     var body: some View {
         VStack(spacing: 0) {
@@ -224,12 +217,12 @@ struct AccountStockHeader: View {
             // Stock row
             HStack(alignment: .center, spacing: 12) {
                 // Logo
-                StockLogo(code: "GOTO", color: "#00AA5B")
+                StockLogo(code: stock.code, color: stock.logoColor)
 
                 // Name + haircut
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 6) {
-                        Text("GOTO")
+                        Text(stock.code)
                             .font(.system(size: 20, weight: .bold))
                             .foregroundStyle(.white)
 
@@ -249,12 +242,12 @@ struct AccountStockHeader: View {
                         }
                     }
 
-                    Text("GoTo Gojek Tokopedia Tbk")
+                    Text(stock.name)
                         .font(.system(size: 11))
                         .foregroundStyle(.white.opacity(0.8))
                         .lineLimit(1)
 
-                    Text("Haircut 100%")
+                    Text("Haircut \(stock.haircutLabel)")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.white.opacity(0.7))
                 }
@@ -262,12 +255,12 @@ struct AccountStockHeader: View {
                 Spacer()
 
                 VStack {
-                    Text("\(price)")
+                    Text("\(stock.price)")
                         .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(.white)
 
-                    let change = 0 // refactor
-                    let changePct = 0.0 // refactor
+                    let change = stock.change
+                    let changePct = stock.changePct
                     let changeStr = change >= 0
                     ? "+\(change) (\(String(format: "%.2f", changePct))%)"
                     : "-\(change) (\(String(format: "%.2f", changePct))%)"
