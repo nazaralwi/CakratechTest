@@ -6,8 +6,14 @@
 //
 
 import SwiftUI
+import Combine
+
+class OrderbookViewModel: ObservableObject {
+    @Published var showTable: Bool = true
+}
 
 struct OrderbookView: View {
+    @StateObject private var vm = OrderbookViewModel()
     let stock = Stock(code: "GOTO", name: "GoTo Gojek Tokopedia Tbk", price: 58, change: 0, changePct: 0.0, logoColor: "#00AA5B", haircutLabel: "100%")
 
     var body: some View {
@@ -41,8 +47,11 @@ struct OrderbookView: View {
 
                             Button {
                                 // Toggle state show/hide table
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    vm.showTable.toggle()
+                                }
                             } label: {
-                                Text("Hide Table")
+                                Text(vm.showTable ? "Hide Table" : "Show Table")
                                     .font(.system(size: 13))
                                     .foregroundStyle(.blue)
                             }
@@ -52,7 +61,9 @@ struct OrderbookView: View {
                         .padding(.bottom, 8)
 
                         // OrderbookTable
-                        OrderbookTable()
+                        if vm.showTable {
+                            OrderbookTable()
+                        }
                     }
                 }
             }
