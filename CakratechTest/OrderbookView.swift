@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct OrderbookView: View {
+    let price = 58
+    let orderbookRows: [OrderbookRow] = generateOrderbook(basePrice: 58)
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -17,7 +20,7 @@ struct OrderbookView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         // AccountStockHeader
-                        AccountStockHeader()
+                        AccountStockHeader(price: price)
 
                         // Orderbook / show table toggle
                         HStack {
@@ -73,15 +76,121 @@ struct OrderbookView: View {
                             .padding(.vertical, 6)
 
                             Divider()
+
+                            ForEach(orderbookRows) { row in
+                                // OrderbookRowView
+                                HStack(spacing: 0) {
+                                    // Bid lot
+                                    Group {
+                                        if let lot = row.bidLot {
+                                            Text(lotFormatted(lot))
+                                                .font(.system(size: 12, design: .monospaced))
+                                                .foregroundStyle(.primary)
+                                        } else {
+                                            Text("")
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                                    Spacer()
+
+                                    // Bid Price
+                                    Group {
+                                        if let price = row.bidPrice {
+                                            Text("\(price)")
+                                                .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                                                .foregroundStyle(.green)
+                                                .frame(width: 40, alignment: .trailing)
+                                        } else {
+                                            Text("").frame(width: 40)
+                                        }
+                                    }
+
+                                    // Center divider bar
+                                    ZStack {
+                                        Rectangle()
+                                            .fill(Color.gray.opacity(0.2))
+                                            .frame(width: 1, height: 18)
+                                            .padding(.horizontal, 8)
+                                    }
+                                    .frame(width: 18)
+
+                                    // Ask price
+                                    Group {
+                                        if let price = row.askPrice {
+                                            Text("\(price)")
+                                                .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                                                .foregroundStyle(.red)
+                                                .frame(width: 40, alignment: .leading)
+                                        } else {
+                                            Text("").frame(width: 40)
+                                        }
+                                    }
+
+                                    Spacer()
+
+                                    // Ask lot
+                                    Group {
+                                        if let lot = row.askLot {
+                                            Text(lotFormatted(lot))
+                                                .font(.system(size: 12, design: .monospaced))
+                                                .foregroundStyle(.primary)
+                                        } else {
+                                            Text("")
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                                }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 5)
+                                .background(.clear)
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+    private func lotFormatted(_ n: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        return formatter.string(from: NSNumber(value: n)) ?? "\(n)"
+    }
+}
+
+struct OrderbookRow: Identifiable {
+    let id = UUID()
+    let bidLot: Int?
+    let bidPrice: Int?
+    let askPrice: Int?
+    let askLot: Int?
+}
+
+func generateOrderbook(basePrice: Int) -> [OrderbookRow] {
+    var rows: [OrderbookRow] = []
+
+    let bidPrice = (0..<8).map { basePrice - $0 }
+    let askPrice = (0..<10).map { basePrice + 1 + $0 }
+
+    for i in 0..<8 {
+        rows.append(OrderbookRow(
+            bidLot: Int.random(in: 500_000...10_000_000),
+            bidPrice: bidPrice[i],
+            askPrice: askPrice[i],
+            askLot: Int.random(in: 500_000...8_000_000)
+        ))
+    }
+
+    rows.append(OrderbookRow(bidLot: nil, bidPrice: nil, askPrice: askPrice[8], askLot: Int.random(in: 200_000...3_000_000)))
+    rows.append(OrderbookRow(bidLot: nil, bidPrice: nil, askPrice: askPrice[9], askLot: Int.random(in: 200_000...3_000_000)))
+    return rows
 }
 
 struct AccountStockHeader: View {
+    let price: Int
+
     var body: some View {
         VStack(spacing: 0) {
             // AccountRow
@@ -145,7 +254,7 @@ struct AccountStockHeader: View {
                 Spacer()
 
                 VStack {
-                    Text("58")
+                    Text("\(price)")
                         .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(.white)
 
