@@ -10,8 +10,6 @@ import SwiftUI
 struct OrderbookView: View {
     let stock = Stock(code: "GOTO", name: "GoTo Gojek Tokopedia Tbk", price: 58, change: 0, changePct: 0.0, logoColor: "#00AA5B", haircutLabel: "100%")
 
-    let orderbookRows: [OrderbookRow] = generateOrderbook(basePrice: 58)
-
     var body: some View {
         NavigationView {
             ZStack {
@@ -54,37 +52,45 @@ struct OrderbookView: View {
                         .padding(.bottom, 8)
 
                         // OrderbookTable
-                        VStack {
-                            HStack {
-                                Text("Lot")
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .foregroundStyle(.secondary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                Text("Bid")
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .foregroundStyle(.secondary)
-                                    .frame(width: 50, alignment: .trailing)
-                                Text("Ask")
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .foregroundStyle(.secondary)
-                                    .frame(width: 50, alignment: .leading)
-                                Text("Lot")
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .foregroundStyle(.secondary)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 6)
-
-                            Divider()
-
-                            ForEach(orderbookRows) { row in
-                                // OrderbookRowView
-                                OrderbookRowView(row: row)
-                            }
-                        }
+                        OrderbookTable()
                     }
                 }
+            }
+        }
+    }
+}
+
+struct OrderbookTable: View {
+    let orderbookRows: [OrderbookRow] = generateOrderbook(basePrice: 58)
+
+    var body: some View {
+        VStack {
+            HStack {
+                Text("Lot")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("Bid")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 50, alignment: .trailing)
+                Text("Ask")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 50, alignment: .leading)
+                Text("Lot")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 6)
+
+            Divider()
+
+            ForEach(orderbookRows) { row in
+                // OrderbookRowView
+                OrderbookRowView(row: row)
             }
         }
     }
