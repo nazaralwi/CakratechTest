@@ -77,6 +77,27 @@ struct OrderbookView: View {
                     }
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        // Could be move to another screen
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundStyle(.primary)
+                            .fontWeight(.medium)
+                    }
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        // Could be print or copy something
+                    } label: {
+                        Image(systemName: "doc.text")
+                            .foregroundStyle(.primary)
+                    }
+                }
+            }
         }
     }
 }
