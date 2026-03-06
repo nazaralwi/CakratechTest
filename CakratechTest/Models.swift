@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Stock {
+struct Stock: Identifiable {
     let id = UUID()
     let code: String
     let name: String
