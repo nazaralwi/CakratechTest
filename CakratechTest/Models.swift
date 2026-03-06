@@ -66,7 +66,7 @@ extension Stock {
         Stock(code: "UNVR", name: "Unilever Indonesia Tbk", price: 2510, change: -20, changePct: -0.79, logoColor: "#1abc9c", haircutLabel: "0%"),
     ]
 
-    func generateOrderbook(basePrice: Int) -> [OrderbookRow] {
+    static func generateOrderbook(basePrice: Int) -> [OrderbookRow] {
         var rows: [OrderbookRow] = []
 
         let bidPrice = (0..<8).map { basePrice - $0 }
