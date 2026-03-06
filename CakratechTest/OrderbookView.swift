@@ -9,12 +9,12 @@ import SwiftUI
 import Combine
 
 class OrderbookViewModel: ObservableObject {
+    @Published var selectedStock: Stock = Stock.sampleStocks.first(where: { $0.code == "GOTO" })!
     @Published var showTable: Bool = true
 }
 
 struct OrderbookView: View {
     @StateObject private var vm = OrderbookViewModel()
-    let stock = Stock(code: "GOTO", name: "GoTo Gojek Tokopedia Tbk", price: 58, change: 0, changePct: 0.0, logoColor: "#00AA5B", haircutLabel: "100%")
 
     var body: some View {
         NavigationView {
@@ -25,7 +25,7 @@ struct OrderbookView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         // AccountStockHeader
-                        AccountStockHeader(stock: stock)
+                        AccountStockHeader(vm: vm)
 
                         // Orderbook / show table toggle
                         HStack {
@@ -215,7 +215,7 @@ func generateOrderbook(basePrice: Int) -> [OrderbookRow] {
 }
 
 struct AccountStockHeader: View {
-    let stock: Stock
+    @ObservedObject var vm: OrderbookViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -242,12 +242,12 @@ struct AccountStockHeader: View {
             // Stock row
             HStack(alignment: .center, spacing: 12) {
                 // Logo
-                StockLogo(code: stock.code, color: stock.logoColor)
+                StockLogo(code: vm.selectedStock.code, color: vm.selectedStock.logoColor)
 
                 // Name + haircut
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 6) {
-                        Text(stock.code)
+                        Text(vm.selectedStock.code)
                             .font(.system(size: 20, weight: .bold))
                             .foregroundStyle(.white)
 
@@ -267,12 +267,12 @@ struct AccountStockHeader: View {
                         }
                     }
 
-                    Text(stock.name)
+                    Text(vm.selectedStock.name)
                         .font(.system(size: 11))
                         .foregroundStyle(.white.opacity(0.8))
                         .lineLimit(1)
 
-                    Text("Haircut \(stock.haircutLabel)")
+                    Text("Haircut \(vm.selectedStock.haircutLabel)")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.white.opacity(0.7))
                 }
@@ -280,12 +280,12 @@ struct AccountStockHeader: View {
                 Spacer()
 
                 VStack {
-                    Text("\(stock.price)")
+                    Text("\(vm.selectedStock.price)")
                         .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(.white)
 
-                    let change = stock.change
-                    let changePct = stock.changePct
+                    let change = vm.selectedStock.change
+                    let changePct = vm.selectedStock.changePct
                     let changeStr = change >= 0
                     ? "+\(change) (\(String(format: "%.2f", changePct))%)"
                     : "-\(change) (\(String(format: "%.2f", changePct))%)"
