@@ -72,6 +72,7 @@ struct OrderbookView: View {
                         // OrderbookTable
                         if vm.showTable {
                             OrderbookTable(vm: vm)
+                                .transition(.opacity.combined(with: .move(edge: .top)))
                         }
                     }
                 }
