@@ -17,7 +17,7 @@ struct OrderbookView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         // AccountStockHeader
-                        VStack {
+                        VStack(spacing: 0) {
                             // AccountRow
                             HStack(spacing: 8) {
                                 ZStack {
@@ -37,6 +37,73 @@ struct OrderbookView: View {
                             .padding(.horizontal, 16)
                             .padding(.top, 14)
                             .padding(.bottom, 10)
+
+                            // Stock row
+                            HStack(alignment: .center, spacing: 12) {
+                                // Logo
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color(hex: "#00AA5B") ?? .gray)
+                                        .frame(width: 44, height: 44)
+                                    Text(String("GOTO".prefix(2)))
+                                        .font(.system(size: 14, weight: .black))
+                                        .foregroundStyle(.white)
+                                }
+
+                                // Name + haircut
+                                VStack(alignment: .leading, spacing: 2) {
+                                    HStack(spacing: 6) {
+                                        Text("GOTO")
+                                            .font(.system(size: 20, weight: .bold))
+                                            .foregroundStyle(.white)
+
+                                        // K badge, don't know
+                                        Text("K")
+                                            .font(.system(size: 10, weight: .black))
+                                            .foregroundStyle(.black)
+                                            .padding(.horizontal, 5)
+                                            .padding(.vertical, 2)
+                                            .background(.yellow)
+                                            .cornerRadius(3)
+
+                                        Button(action: {}) {
+                                            Image(systemName: "chevron.down")
+                                                .font(.system(size: 13, weight: .semibold))
+                                                .foregroundStyle(.white.opacity(0.8))
+                                        }
+                                    }
+
+                                    Text("GoTo Gojek Tokopedia Tbk")
+                                        .font(.system(size: 11))
+                                        .foregroundStyle(.white.opacity(0.8))
+                                        .lineLimit(1)
+
+                                    Text("Haircut 100%")
+                                        .font(.system(size: 10, weight: .bold))
+                                        .foregroundStyle(.white.opacity(0.7))
+                                }
+
+                                Spacer()
+
+                                VStack {
+                                    Text("58")
+                                        .font(.system(size: 22, weight: .bold))
+                                        .foregroundStyle(.white)
+
+                                    let change = 0 // refactor
+                                    let changePct = 0.0 // refactor
+                                    let changeStr = change >= 0
+                                    ? "+\(change) (\(String(format: "%.2f", changePct))%)"
+                                    : "-\(change) (\(String(format: "%.2f", changePct))%)"
+
+                                    Text(changeStr)
+                                        .font(.system(size: 12))
+                                        .foregroundStyle(.white.opacity(0.7))
+
+                                }
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 14)
                         }
                         .background(.blue)
                     }
@@ -48,4 +115,17 @@ struct OrderbookView: View {
 
 #Preview {
     OrderbookView()
+}
+
+extension Color {
+    init?(hex: String) {
+        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        hexSanitized = hexSanitized.hasPrefix("#") ? String(hexSanitized.dropFirst()) : hexSanitized
+        guard hexSanitized.count == 6, let hexValue = UInt64(hexSanitized, radix: 16) else { return nil }
+        self.init(
+            red: Double((hexValue & 0xFF0000) >> 16) / 255,
+            green: Double((hexValue & 0x00FF00) >> 8) / 255,
+            blue: Double(hexValue & 0x0000FF) / 255
+        )
+    }
 }
