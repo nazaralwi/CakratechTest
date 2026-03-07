@@ -25,6 +25,14 @@ class OrderbookViewModel: ObservableObject {
         selectedStock = stock
         refreshOrderbook()
     }
+
+    func sumBidLots() -> Int {
+        orderbookRows.compactMap { $0.bidLot }.reduce(0, +)
+    }
+
+    func sumAskLots() -> Int {
+        orderbookRows.compactMap { $0.askLot }.reduce(0, +)
+    }
 }
 
 struct OrderbookView: View {
@@ -80,6 +88,9 @@ struct OrderbookView: View {
                             OrderbookTable(vm: vm)
                                 .transition(.opacity.combined(with: .move(edge: .top)))
                         }
+
+                        // Sum Row
+                        SumRow(vm: vm)
                     }
                 }
             }
@@ -108,6 +119,37 @@ struct OrderbookView: View {
         .sheet(isPresented: $showStockSearch) {
             StockSearchSheet(vm: vm, isPresented: $showStockSearch)
         }
+    }
+}
+
+struct SumRow: View {
+    @ObservedObject var vm: OrderbookViewModel
+
+    var body: some View {
+        HStack {
+            Text(lotFormatted(vm.sumBidLots()))
+                .font(.system(size: 12, weight: .semibold, design: .monospaced))
+
+            Spacer()
+
+            Text("SUM")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.secondary)
+
+            Spacer()
+
+            Text(lotFormatted(vm.sumAskLots()))
+                .font(.system(size: 12, weight: .semibold, design: .monospaced))
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(Color(UIColor.secondarySystemBackground))
+    }
+
+    private func lotFormatted(_ n: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter.string(from: NSNumber(value: n)) ?? "\(n)"
     }
 }
 
