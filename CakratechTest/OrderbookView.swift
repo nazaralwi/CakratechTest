@@ -63,6 +63,9 @@ struct OrderbookView: View {
 
                         // Sum Row
                         SumRow(vm: vm)
+
+                        // Buy / Sell Tabs
+                        BuySellTabs(vm: vm)
                     }
                 }
             }
@@ -122,6 +125,38 @@ struct SumRow: View {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         return formatter.string(from: NSNumber(value: n)) ?? "\(n)"
+    }
+}
+
+struct BuySellTabs: View {
+    @ObservedObject var vm: OrderbookViewModel
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(["buy", "sell"], id: \.self) { tab in
+                Button {
+                    vm.selectedTab = tab
+                } label: {
+                    VStack(spacing: 4) {
+                        Text(tab.capitalized)
+                            .font(.system(size: 15, weight: vm.selectedTab == tab ? .semibold : .regular))
+                            .foregroundStyle(vm.selectedTab == tab ? .primary : .secondary)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+
+                        Rectangle()
+                            .fill(vm.selectedTab == tab ? .blue : .clear)
+                            .frame(height: 2)
+                    }
+                }
+            }
+        }
+        .background(
+            VStack {
+                Spacer()
+                Divider()
+            }
+        )
     }
 }
 

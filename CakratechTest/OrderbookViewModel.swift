@@ -11,6 +11,7 @@ class OrderbookViewModel: ObservableObject {
     @Published var selectedStock: Stock = Stock.sampleStocks.first(where: { $0.code == "GOTO" })!
     @Published var orderbookRows: [OrderbookRow] = []
     @Published var showTable: Bool = true
+    @Published var selectedTab: String = "buy"
 
     init() {
         refreshOrderbook()
